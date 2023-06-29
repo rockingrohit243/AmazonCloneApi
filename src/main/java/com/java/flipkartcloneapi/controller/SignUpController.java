@@ -1,6 +1,7 @@
 package com.java.flipkartcloneapi.controller;
 
 import com.java.flipkartcloneapi.Entity.SignUpUser;
+import com.java.flipkartcloneapi.Model.RequestedOtpFromUser;
 import com.java.flipkartcloneapi.Model.ResponseSignUp;
 import com.java.flipkartcloneapi.service.UserService;
 import jakarta.mail.MessagingException;
@@ -14,5 +15,10 @@ public class SignUpController {
     @RequestMapping(value = "/signup",method = RequestMethod.POST)
     public ResponseSignUp createUser(@RequestBody SignUpUser signUpUser) throws MessagingException {
 return userService.createUserService(signUpUser);
+    }
+    @PostMapping("verifysignupotp")
+public String verifyOtp(@RequestBody RequestedOtpFromUser requestedOtpFromUser)
+    {
+        return userService.verifyNewUser(requestedOtpFromUser);
     }
 }
