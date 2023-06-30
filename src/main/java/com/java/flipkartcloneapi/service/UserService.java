@@ -28,32 +28,12 @@ public class UserService {
         if (signUpUser1.isPresent()) {
             responseSignUp.setStatus("-1");
             responseSignUp.setSuccess(false);
-            responseSignUp.setStatusDesc("Email already present");
+            responseSignUp.setStatusDesc("User already exists with this email!! \n  please signIn with your credentials");
             return responseSignUp;
         } else {
             validateUser(signUpUser);
             if (responseSignUp.getCheck() == "0") {
-                //todo generating random 6 digit otp
-                int otpLength = 6;
-                StringBuilder otp = new StringBuilder();
-                Random random = new Random();
-                for (int i = 0; i < otpLength; i++) {
-                    int digit = random.nextInt(10);  // Generate a random digit from 0 to 9
-                    otp.append(digit);
-                }
-                String generatedOtp = otp.toString();
-                System.out.println("otp is" + generatedOtp);
-                MimeMessage message11 = emailSender.createMimeMessage();
-                MimeMessageHelper helper;
-                helper = new MimeMessageHelper(message11, true);
-                helper.setTo(signUpUser.getEmail());
-                helper.setFrom("amazon.servicebackend@gmail.com");
-                helper.setSubject("Amazon password assistance");
-                helper.setText("To authenticate, please use the following One Time Password (OTP):\n" + "\n" + generatedOtp + "\n" + "Don't share this OTP with anyone. Our customer service team will never ask you for your password, OTP, credit card, or banking info.\n" + "\n" + "We hope to see you again soon.");
-                emailSender.send(message11);
-                System.out.println("otp send");
-                signUpUser.setOtp(generatedOtp);
-                userSignupRepository.save(signUpUser);
+                sendOtpToUser(signUpUser);
                 responseSignUp.setSuccess(true);
                 responseSignUp.setStatus("0");
                 responseSignUp.setStatusDesc("otp send successfully");
@@ -62,6 +42,8 @@ public class UserService {
         }
         return responseSignUp;
     }
+
+
 
     private ResponseSignUp validateUser(SignUpUser signUpUser) {
         //todo for validating first name
@@ -126,5 +108,32 @@ public class UserService {
 
         } else
             return "email not found";
+    }
+
+
+       // todo for sending otp to the user
+    private void sendOtpToUser(SignUpUser signUpUser) throws MessagingException {
+        //todo generating random 6 digit otp
+        int otpLength = 6;
+        StringBuilder otp = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < otpLength; i++) {
+            int digit = random.nextInt(10);  // Generate a random digit from 0 to 9
+            otp.append(digit);
+        }
+        String generatedOtp = otp.toString();
+        System.out.println("otp is" + generatedOtp);
+        MimeMessage message11 = emailSender.createMimeMessage();
+        MimeMessageHelper helper;
+        helper = new MimeMessageHelper(message11, true);
+        helper.setTo(signUpUser.getEmail());
+        helper.setFrom("amazon.servicebackend@gmail.com");
+        helper.setSubject("Amazon password assistance");
+        helper.setText("To authenticate, please use the following One Time Password (OTP):\n" + "\n" + generatedOtp + "\n" + "Don't share this OTP with anyone. Our customer service team will never ask you for your password, OTP, credit card, or banking info.\n" + "\n" + "We hope to see you again soon.");
+        emailSender.send(message11);
+        System.out.println("otp send");
+        signUpUser.setOtp(generatedOtp);
+        userSignupRepository.save(signUpUser);
+
     }
 }
