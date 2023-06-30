@@ -1,4 +1,4 @@
-package com.java.flipkartcloneapi.Model;
+package com.java.amazoncloneapi.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

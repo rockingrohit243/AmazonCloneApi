@@ -1,4 +1,4 @@
-package com.java.flipkartcloneapi.Entity;
+package com.java.amazoncloneapi.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;

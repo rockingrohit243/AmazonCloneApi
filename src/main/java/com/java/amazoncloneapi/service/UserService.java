@@ -1,16 +1,14 @@
-package com.java.flipkartcloneapi.service;
-import com.java.flipkartcloneapi.Entity.SignUpUser;
-import com.java.flipkartcloneapi.Model.RequestedOtpFromUser;
-import com.java.flipkartcloneapi.Model.ResponseSignUp;
-import com.java.flipkartcloneapi.Repository.UserSignupRepository;
+package com.java.amazoncloneapi.service;
+import com.java.amazoncloneapi.Entity.SignUpUser;
+import com.java.amazoncloneapi.Model.RequestedOtpFromUser;
+import com.java.amazoncloneapi.Model.ResponseSignUp;
+import com.java.amazoncloneapi.Repository.SignUpUserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -18,13 +16,13 @@ import java.util.Random;
 @Service
 public class UserService {
     @Autowired
-    UserSignupRepository userSignupRepository;
+    SignUpUserRepository signUpUserRepository;
     ResponseSignUp responseSignUp = new ResponseSignUp();
     @Autowired
     private JavaMailSender emailSender;
 
     public ResponseSignUp createUserService(SignUpUser signUpUser) throws MessagingException {
-        Optional<SignUpUser> signUpUser1 = Optional.ofNullable(userSignupRepository.findByEmail(signUpUser.getEmail()));
+        Optional<SignUpUser> signUpUser1 = Optional.ofNullable(signUpUserRepository.findByEmail(signUpUser.getEmail()));
         if (signUpUser1.isPresent()) {
             responseSignUp.setStatus("-1");
             responseSignUp.setSuccess(false);
@@ -53,7 +51,7 @@ public class UserService {
                 emailSender.send(message11);
                 System.out.println("otp send");
                 signUpUser.setOtp(generatedOtp);
-                userSignupRepository.save(signUpUser);
+                signUpUserRepository.save(signUpUser);
                 responseSignUp.setSuccess(true);
                 responseSignUp.setStatus("0");
                 responseSignUp.setStatusDesc("otp send successfully");
@@ -115,7 +113,7 @@ public class UserService {
     // todo verify user
     public String verifyNewUser(RequestedOtpFromUser requestedOtpFromUser) {
         Optional<SignUpUser> signUpUser;
-        signUpUser = Optional.ofNullable(userSignupRepository.findByEmail(requestedOtpFromUser.getSameEmail()));
+        signUpUser = Optional.ofNullable(signUpUserRepository.findByEmail(requestedOtpFromUser.getSameEmail()));
         if (signUpUser.isPresent()) {
             if (Objects.equals(signUpUser.get().getOtp(), requestedOtpFromUser.getRequestedOtp())) {
                 return "amazonHomePage";

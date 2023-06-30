@@ -1,9 +1,9 @@
-package com.java.flipkartcloneapi.controller;
+package com.java.amazoncloneapi.controller;
 
-import com.java.flipkartcloneapi.Entity.SignUpUser;
-import com.java.flipkartcloneapi.Model.RequestedOtpFromUser;
-import com.java.flipkartcloneapi.Model.ResponseSignUp;
-import com.java.flipkartcloneapi.service.UserService;
+import com.java.amazoncloneapi.Entity.SignUpUser;
+import com.java.amazoncloneapi.Model.RequestedOtpFromUser;
+import com.java.amazoncloneapi.Model.ResponseSignUp;
+import com.java.amazoncloneapi.service.UserService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
